@@ -1,7 +1,10 @@
 - hosts: localhost  
   tasks:
 
- # 
-  - name: Check
+  - name: Check a diskutil list
     shell: |
-      arp -a
+      diskutil list
+
+  - name: Install OS Image to MicroSD
+    shell: |
+       ls
