@@ -1,10 +1,22 @@
 - hosts: localhost  
   tasks:
 
+  # - name: Install OS image
+  #   shell: |
+  #     wget https://people.centos.org/pgreco/CentOS-Userland-8-stream-aarch64-RaspberryPI-Minimal-4/CentOS-Userland-8-stream-aarch64-RaspberryPI-Minimal-4-sda.raw.xz
+
   - name: Check a diskutil list
     shell: |
-      diskutil list
+      diskutil list | grep external -A 5
+    register: diskutil_list
 
-  - name: Install OS Image to MicroSD
+  - name: Unmount a disk
+    become: true
     shell: |
-       ls
+       diskutil unmountDisk /dev/disk2
+
+  - name: Install OS img into MicroSD    
+    become: true
+    shell:        
+       dd bs=1m if='{{ file }}' of=/dev/rdisk2 conv=sync
+      
